@@ -1,0 +1,41 @@
+---
+import { Picture } from '@astrojs/image/components';
+import Layout from '../layouts/Layout.astro';
+// import PostItem from "../components/PostItem.astro"
+
+let posts = await Astro.glob("../pages/blog/*.md")
+posts = posts.filter((date) => date.frontmatter.status === "published")
+
+---
+
+<Layout title="Blog.">
+
+			<div class="post-list">
+				{posts.map((post) => (
+				<h2>{post.frontmatter.title}</h2>
+
+				<Picture src={post.frontmatter.image.path} alt={post.frontmatter.image.alt ? `${post.frontmatter.image.alt}` : ` `} widths={[200, 400, 800]} aspectRatio="4:3" sizes="(max-width: 800px) 100vw, 800px" />
+
+					// <PostItem
+					// 	url={post.url}
+					// 	title={post.frontmatter.title}
+					// 	datePublished={post.frontmatter.date.published}
+					// 	image={post.frontmatter.image.path}
+					// 	alt={post.frontmatter.image.alt}
+					// 	description={post.frontmatter.description}
+					// />
+				))}
+			</div>
+		
+</Layout>
+
+	
+<style is:global>
+	img {
+		max-width: 400px;
+		height: auto;
+	}
+</style>
+
+
+

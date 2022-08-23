@@ -1,0 +1,44 @@
+---
+import { Picture } from '@astrojs/image/components';
+
+export interface Props {
+	url: string
+	title: string
+	image?: string
+	alt: string
+	datePublished: string
+	description: string
+}
+
+const { url, title, image, alt, datePublished, description } =
+	Astro.props
+---
+
+<article class={image ? "post post-has-img" : "post"}>
+	<figure class="post-figure">
+
+		<!-- <img src={image} alt={alt ? `${alt}` : ` `} /> -->
+		<Picture src={image} alt={alt ? `${alt}` : ` `} widths={[200, 400, 800]} aspectRatio="4:3" sizes="(max-width: 800px) 100vw, 800px" />
+
+	</figure>
+	<div class="post-content">
+		<div class="post-header">
+			
+			<h2 class="post-title font-size-4">
+				<a href={url} class="post-link">{title}</a>
+			</h2>
+
+			<dl class="post-meta">
+				<dt class="post-meta-key">
+					<span class="sr-only">Date Published</span>
+				</dt>
+				<dd class="post-meta-value">
+					{datePublished}
+				</dd>
+			</dl>
+		</div>
+		<p class="post-description" set:html={description}></p>
+	</div>
+</article>
+
+
