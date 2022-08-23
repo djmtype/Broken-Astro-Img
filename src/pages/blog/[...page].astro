@@ -1,0 +1,53 @@
+---
+import { Picture } from '@astrojs/image/components';
+import Layout from '../../layouts/Layout.astro';
+import PostItem from "../../components/PostItem.astro"
+
+export async function getStaticPaths({ paginate }) {
+	const allPosts = await Astro.glob("./*.md")
+	const sortedPosts = allPosts.sort(
+		(a, b) =>
+			new Date(b.frontmatter.date.published).valueOf() -
+			new Date(a.frontmatter.date.published).valueOf()
+	)
+
+	// Return a paginated collection of paths for all posts
+	return paginate(sortedPosts, { pageSize: 10 })
+}
+
+
+const { page } = Astro.props
+
+---
+
+<Layout title="Blog.">
+
+			<div class="post-list">
+				{page.data.map((post) => (
+				<h2>{post.frontmatter.title}</h2>
+
+				<Picture src={post.frontmatter.image.path} alt={post.frontmatter.image.alt ? `${post.frontmatter.image.alt}` : ` `} widths={[200, 400, 800]} aspectRatio="4:3" sizes="(max-width: 800px) 100vw, 800px" />
+
+					// <PostItem
+					// 	url={post.url}
+					// 	title={post.frontmatter.title}
+					// 	datePublished={post.frontmatter.date.published}
+					// 	image={post.frontmatter.image.path}
+					// 	alt={post.frontmatter.image.alt}
+					// 	description={post.frontmatter.description}
+					// />
+				))}
+			</div>
+		
+</Layout>
+
+	
+<style is:global>
+	img {
+		max-width: 400px;
+		height: auto;
+	}
+</style>
+
+
+
